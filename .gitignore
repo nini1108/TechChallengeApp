@@ -1,3 +1,5 @@
 *.local
 *.tfstate*
 *.terraform*
+*plan.out*
+Terraform/plan.out
