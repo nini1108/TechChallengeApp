@@ -1,0 +1,6 @@
+[apphost]
+10.5.1.75 ansible_connection=local
+
+[dbhost]
+10.5.1.75 ansible_connection=local
+

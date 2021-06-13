@@ -1,0 +1,20 @@
+---
+- hosts: "{{ hostgroup_appserver }}"
+  remote_user: "{{ ansible_system_user }}"
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - appserver
+    
+
+- hosts: "{{ hostgroup_dbserver }}"
+  remote_user: "{{ ansible_system_user }}"
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - dbserver
+
+
+
+
+

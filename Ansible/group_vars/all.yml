@@ -1,0 +1,9 @@
+
+hostgroup_appserver: apphost        #app server host group defined in hosts file
+hostgroup_dbserver: dbhost          #database server host group defined in hosts file
+
+dbname: thedb                       #database name. Change accordingly
+dbpassword:                         #enter the db password before you run the anisble playbook
+dbuser: theuser                     #database user. Change accordingly
+
+

@@ -1,0 +1,63 @@
+---
+
+#Update repo
+- name: Update repo
+  become: true
+  command: apt update
+
+
+#Install postgres
+- name: Install postgres
+  become: true
+  apt: name={{item}} state=present update_cache=yes
+  with_items:
+    - postgresql
+    - postgresql-contrib
+
+
+#Update pg_hba.conf
+- name: Update pg_hba.conf using template
+  become: true
+  template:
+    src=pg_hba.conf.j2
+    dest=/etc/postgresql/10/main/pg_hba.conf
+    owner=postgres
+    group=postgres
+    mode=0640
+
+
+#Update postgresql.conf
+- name: Change listen address in postgresql.conf
+  become: true
+  lineinfile:
+    path=/etc/postgresql/10/main/postgresql.conf
+    regexp='^#listen_addresses'
+    line='listen_addresses = \'*\''
+  
+
+#Create user
+- name: Create user in postgres database
+  become: true
+  shell: |
+    su - postgres -c \
+    "psql <<__END__
+        CREATE USER {{dbuser}} ;
+        ALTER USER {{dbuser}} CREATEDB;
+        CREATE DATABASE {{dbname}};
+        grant all privileges on database {{dbname}} to {{dbuser}} ;
+        alter user {{dbuser}} password '{{dbpassword}}';
+        select * from information_schema.role_table_grants where grantee='{{dbuser}}' ;
+        __END__
+    "
+    exit 0
+  args:
+    executable: /bin/bash
+ 
+
+#restart postgres
+- name: Restart postgres
+  become: true
+  command: systemctl restart postgresql
+  #ignore_errors: true
+
+
