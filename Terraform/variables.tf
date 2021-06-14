@@ -27,15 +27,6 @@ variable vpc_cidr_block {
     description = "VPC cidr"
 }
 
-variable public_subnet_cidr_block {
-    type        = string
-    description = "public subnet cidr"
-}
-
-variable Private_subnet_cidr_block {
-    type        = string
-    description = "private subnet cidr"
-}
 
 variable subnet_a_cidr_block {
     type        = string
