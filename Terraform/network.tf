@@ -7,52 +7,52 @@ module "VPC" {
     tags                    = { "Name":"${var.project_name}_vpc", "project_name":var.project_name , "env": var.env}
 }
 
-# Create Public Subnet public_subnetA
-module "Public_Subnet_A" {
+# Create subnet subnet_a
+module "Subnet_A" {
     source                      = "../modules/Networking/Subnet"
     vpc_id                      = module.VPC.id
-    subnet_cidr_block           = var.public_subnet_cidr_block    #"10.5.1.0/24"
+    subnet_cidr_block           = var.subnet_a_cidr_block    #"10.5.1.0/24"
     subnet_availability_zone    = "ap-southeast-2a"
-    tags                        = { "Name":"${var.project_name}_public_subnetA" , "project_name":var.project_name , "env": var.env}
+    tags                        = { "Name":"${var.project_name}_subnet_a" , "project_name":var.project_name , "env": var.env}
 }
 
-# Create Private Subnet private_subnetA
-module "Private_Subnet_A" {
+# Create subnet subnet_b
+module "Subnet_B" {
     source                      = "../modules/Networking/Subnet"
     vpc_id                      = module.VPC.id
-    subnet_cidr_block           = var.Private_subnet_cidr_block    #"10.5.2.0/24"
-    subnet_availability_zone    = "ap-southeast-2a"
-    tags                        = { "Name":"${var.project_name}_private_subnetA" , "project_name":var.project_name , "env": var.env}
+    subnet_cidr_block           = var.subnet_b_cidr_block    #"10.5.2.0/24"
+    subnet_availability_zone    = "ap-southeast-2b"
+    tags                        = { "Name":"${var.project_name}_subnet_b" , "project_name":var.project_name , "env": var.env}
 }
 
 
-#Create Route table for public subnet A
-module "Route_Table_Public_SubnetA" {
+#Create Route table for subnet_a
+module "Route_Table_Subnet_A" {
     source              = "../modules/Networking/Route_Table"
     route_table_vpc_id  = module.VPC.id
-    tags                = { "Name":"${var.project_name}_route_table_public_subnetA" , "project_name":var.project_name , "env": var.env}
+    tags                = { "Name":"${var.project_name}_route_table_subnet_a" , "project_name":var.project_name , "env": var.env}
 }
 
-#Route table association with public_subnetA
-module "Route_Table_Assoc_Public_SubnetA" {
+#Route table association with subnet_a
+module "Route_Table_Assoc_Subnet_A" {
     source          = "../modules/Networking/Route_Table_Association"
-    subnet_id       = module.Public_Subnet_A.id
-    route_table_id  = module.Route_Table_Public_SubnetA.id
+    subnet_id       = module.Subnet_A.id
+    route_table_id  = module.Route_Table_Subnet_A.id
 }
 
 
-#Create Route table for private subnet A
-module "Route_Table_Private_SubnetA" {
+#Create Route table for subnet_b
+module "Route_Table_Subnet_B" {
     source              = "../modules/Networking/Route_Table"
     route_table_vpc_id  = module.VPC.id
-    tags                = { "Name":"${var.project_name}_route_table_private_subnetA" , "project_name":var.project_name , "env": var.env}
+    tags                = { "Name":"${var.project_name}_route_table_subnet_b" , "project_name":var.project_name , "env": var.env}
 }
 
-#Route table association with private_subnetA
-module "Route_Table_Assoc_Private_SubnetA" {
+#Route table association with subnet_b
+module "Route_Table_Assoc_Subnet_B" {
     source          = "../modules/Networking/Route_Table_Association"
-    subnet_id       = module.Private_Subnet_A.id
-    route_table_id  = module.Route_Table_Private_SubnetA.id
+    subnet_id       = module.Subnet_B.id
+    route_table_id  = module.Route_Table_Subnet_B.id
 }
 
 #Create Internet Gateway
@@ -62,12 +62,20 @@ module "Internet_Gateway" {
     tags                    = { "Name":"${var.project_name}_igw" , "project_name":var.project_name , "env": var.env}
 }
 
-#Create route from public_subnetA to IGW
-module "Route_public_subnetA_IGW" {
+#Create route from subnet_a to IGW
+module "Route_Public_Subnet_A_IGW" {
     source                  = "../modules/Networking/Route"
-    route_table_id          = module.Route_Table_Public_SubnetA.id
+    route_table_id          = module.Route_Table_Subnet_A.id
     destination_cidr_block  = "0.0.0.0/0"
     internet_gateway_id     = module.Internet_Gateway.id
     nat_gateway_id          = null
 }
 
+#Create route from subnet_b to IGW
+module "Route_Public_Subnet_B_IGW" {
+    source                  = "../modules/Networking/Route"
+    route_table_id          = module.Route_Table_Subnet_B.id
+    destination_cidr_block  = "0.0.0.0/0"
+    internet_gateway_id     = module.Internet_Gateway.id
+    nat_gateway_id          = null
+}

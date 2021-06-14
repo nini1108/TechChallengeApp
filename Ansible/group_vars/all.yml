@@ -9,7 +9,7 @@ dbuser: theuser                     #database user. Change accordingly
 db_hostip: 10.5.1.75                #private ip of db host
 
 containername: assessment_spa       #name of the container
-app_accessport: 3000                #port on which to access the app
+app_accessport: 80                #port on which to access the app
 app_listenport: 3000                #container port
 app_listenhost: 0.0.0.0             
 

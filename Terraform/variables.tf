@@ -37,7 +37,15 @@ variable Private_subnet_cidr_block {
     description = "private subnet cidr"
 }
 
+variable subnet_a_cidr_block {
+    type        = string
+    description = "subnet a cidr"
+}
 
+variable subnet_b_cidr_block {
+    type        = string
+    description = "subnet b cidr"
+}
 
 variable public_ssh_key {
     type        = string
