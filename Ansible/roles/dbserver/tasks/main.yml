@@ -43,8 +43,7 @@
     "psql <<__END__
         CREATE USER {{dbuser}} ;
         ALTER USER {{dbuser}} CREATEDB;
-        CREATE DATABASE {{dbname}};
-        grant all privileges on database {{dbname}} to {{dbuser}} ;
+        grant all on tablespace pg_default to {{dbuser}} ;
         alter user {{dbuser}} password '{{dbpassword}}';
         select * from information_schema.role_table_grants where grantee='{{dbuser}}' ;
         __END__

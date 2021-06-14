@@ -1,0 +1,76 @@
+---
+#Command
+- name: Install docker if not exists
+  shell: |
+      REQUIRED_PKG="docker-ce"
+      PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+      echo Checking for $REQUIRED_PKG: $PKG_OK
+      if [ "" = "$PKG_OK" ]; then
+        echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+        sudo apt-get --yes update
+        sudo apt-get --yes install \
+          apt-transport-https \
+          ca-certificates \
+          curl \
+          gnupg-agent \
+          software-properties-common
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo apt-key --yes  fingerprint 0EBFCD88
+        sudo add-apt-repository --yes \
+        "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+        $(lsb_release -cs) \
+        stable"
+        sudo apt-get --yes install docker-ce docker-ce-cli containerd.io 
+      fi
+
+      exit 0
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  become: true
+
+
+#Command
+- name: stop the current container
+  command: docker stop {{containername}}
+  ignore_errors: true
+  become: true
+
+#Command
+- name: remove the old container
+  command: docker rm {{containername}}
+  ignore_errors: true
+  become: true
+
+#Command
+- name: create docker network
+  command: docker network create {{containername}}-network
+  ignore_errors: true
+  become: true
+
+
+#Command
+- name: run the newly built container
+  command: docker run -d -e VTT_DBUSER={{dbuser}} -e VTT_DBPASSWORD={{dbpassword}} -e VTT_DBNAME={{dbname}} -e VTT_DBPORT=5432 -e VTT_DBHOST={{db_hostip}} -e VTT_LISTENHOST={{app_listenhost}} -e VTT_ListenPort="{{app_listenport}}" servian/techchallengeapp:latest updatedb
+  ignore_errors: true
+  become: true
+
+#Command
+- name: run the newly built container
+  command: docker run --restart always -m=600m --cpus=0.5 --name {{containername}} --network {{containername}}-network -p {{app_accessport}}:{{app_listenport}} -e VTT_DBUSER={{dbuser}} -e VTT_DBPASSWORD={{dbpassword}} -e VTT_DBNAME={{dbname}} -e VTT_DBPORT=5432 -e VTT_DBHOST={{db_hostip}} -e VTT_LISTENHOST={{app_listenhost}} -e VTT_ListenPort="{{app_listenport}}" -d servian/techchallengeapp:latest serve
+  ignore_errors: true
+  become: true
+
+
+#Command
+- name: check the build
+  command: docker images -a
+  ignore_errors: true
+  become: true
+
+#Command
+- name: check the running process
+  command: docker ps -a
+  ignore_errors: true
+  become: true
+

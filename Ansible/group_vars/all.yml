@@ -1,3 +1,4 @@
+ansible_system_user: ubuntu
 
 hostgroup_appserver: apphost        #app server host group defined in hosts file
 hostgroup_dbserver: dbhost          #database server host group defined in hosts file
@@ -5,5 +6,11 @@ hostgroup_dbserver: dbhost          #database server host group defined in hosts
 dbname: thedb                       #database name. Change accordingly
 dbpassword:                         #enter the db password before you run the anisble playbook
 dbuser: theuser                     #database user. Change accordingly
+db_hostip: 10.5.1.75                #private ip of db host
+
+containername: assessment_spa       #name of the container
+app_accessport: 3000                #port on which to access the app
+app_listenport: 3000                #container port
+app_listenhost: 0.0.0.0             
 
 
