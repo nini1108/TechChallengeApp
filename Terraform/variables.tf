@@ -22,11 +22,11 @@ variable allowed_iprange {
 }
 
 
+#network
 variable vpc_cidr_block {
     type        = string
     description = "VPC cidr"
 }
-
 
 variable subnet_a_cidr_block {
     type        = string
@@ -38,15 +38,22 @@ variable subnet_b_cidr_block {
     description = "subnet b cidr"
 }
 
+#ASG/vm
 variable public_ssh_key {
     type        = string
     description = "public ssh key for vm to be uploaded in aws key pair"
 }
-
 
 variable public_ssh_key_name {
     type        = string
     description = "public ssh key name for vm"
 }
 
+
+#database
+
+variable db_password {
+    type        = string
+    description = "database password"
+}
 

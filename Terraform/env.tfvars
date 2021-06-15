@@ -1,17 +1,19 @@
-region = "ap-southeast-2"
+region                          = "ap-southeast-2"
 
-env = "test"
+env                             = "test"
 
-project_name = "assessment"
+project_name                    = "assessment"
 
-allowed_iprange  = [""]
+allowed_iprange                 = [""]
 
-public_ssh_key = ""
+public_ssh_key                  = ""
 
-public_ssh_key_name = ""
+public_ssh_key_name             = ""
 
-vpc_cidr_block                    = "10.5.0.0/16"
+vpc_cidr_block                  = "10.5.0.0/16"
 
-subnet_a_cidr_block          = "10.5.1.0/24"
+subnet_a_cidr_block             = "10.5.1.0/24"
 
-subnet_b_cidr_block         = "10.5.2.0/24"
+subnet_b_cidr_block             = "10.5.2.0/24"
+
+db_password                     = ""

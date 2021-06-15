@@ -70,7 +70,7 @@ variable db_publicly_accessible {
 
 variable db_multi_az {
 	type = bool
-	default = "false"
+	default = false
 	description = " true/false"
 }
 
