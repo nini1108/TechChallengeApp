@@ -64,4 +64,4 @@ terraform output -json lb_url
 
 ## Comments
 * DNS has not been setup in this configuration to access the app/alb
-* ansible directory can be ingnored
+* Ansible directory can be ingnored
