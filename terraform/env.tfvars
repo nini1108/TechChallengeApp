@@ -10,12 +10,12 @@ public_ssh_key                  = ""                        #update the content 
 
 public_ssh_key_name             = ""                        #give any name. to be used to upload key in aws
 
-vpc_cidr_block                  = "10.5.0.0/16"
+vpc_cidr_block                  = "10.5.0.0/16"             #"change accordingly"
 
-subnet_a_cidr_block             = "10.5.1.0/24"
+subnet_a_cidr_block             = "10.5.1.0/24"             #"change accordingly"
 
-subnet_b_cidr_block             = "10.5.2.0/24"             
+subnet_b_cidr_block             = "10.5.2.0/24"             #"change accordingly"
 
-db_password                     = ""                         #password for database user postgres
+db_password                     = ""                         #update password for database user postgres
 
 allowed_iprange_alb             = ["0.0.0.0/0"]                #cidr from where app will be accessed
