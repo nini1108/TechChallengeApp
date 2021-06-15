@@ -27,7 +27,7 @@ module "Application_Load_Balancer" {
     target_type                     = "instance"
     target_group_vpc_id             = module.VPC.id
     tags_target_group               = { "project_name":var.project_name , "env": var.env }    
-    target_group_healthcheck_path   = "/healthcheck"                                     
+    target_group_healthcheck_path   = "/healthcheck/"                                     
     target_group_healthy_threshold  = "2"
     target_group_unhealthy_threshold= "2"
     
