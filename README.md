@@ -53,6 +53,7 @@
 ```
 
 ## Access the application from the allowed ip address
+* Give it a few minutes before accessing the app
 * You will get the load balancer url when the script completes its run.
 * Or you can get the application load balancer address from the portal or using the command below.
 ```
