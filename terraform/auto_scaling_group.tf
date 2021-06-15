@@ -4,17 +4,9 @@
 # Create sg for app servers
 module "Sg_App" {
     source                  = "../modules/Networking/Security_Group"
-    security_group_name	    = "${var.project_name}_${var.env}_app_sg"
+    security_group_name	    = "${var.project_name}_app_sg"
     vpc_id_sg	            = module.VPC.id
     tags                    = { "Name":"${var.project_name}_app_sg", "project_name":var.project_name , "env": var.env}
-}
-
-# Create sg for applicatio load balancer
-module "Sg_Alb" {
-    source                  = "../modules/Networking/Security_Group"
-    security_group_name	    = "${var.project_name}_${var.env}_alb_sg"
-    vpc_id_sg	              = module.VPC.id
-    tags                    = { "Name":"${var.project_name}_alb_sg", "project_name":var.project_name , "env": var.env}
 }
 
 #Add  Security group rule to connect from Appserver to Database
@@ -51,17 +43,6 @@ module "Allow_Sg_Rule_ALB_to_App" {
     allowed_security_grp_id	= module.Sg_Alb.id
 }
 
-# Create sgrule for websg to allow 8080 from alb sg
-# Allow HTTP on Application load balancer sg
-module "Allow_Cidr_Rule_HTTP_Alb" {
-    source              = "../modules/Networking/Security_Group_Rule/allow_CIDR_rule"
-    rule_type           = "ingress"
-    security_group_id   = module.Sg_Alb.id
-    from_port	          = 80
-    to_port	            = 80
-    protocol            = "tcp"
-    allowed_cidr_blocks	= var.allowed_iprange
-}
 
 #Upload public key for VMs
 resource "aws_key_pair" "publickey" {
@@ -111,14 +92,10 @@ resource "aws_autoscaling_group" "asg_assessment" {
   name                  = "${var.project_name}_asg"
   launch_configuration  = aws_launch_configuration.asg_launch_config_assesment.id
   vpc_zone_identifier   = [module.Subnet_A.id, module.Subnet_B.id,]
+  target_group_arns = [module.Application_Load_Balancer.target_group_arn]
   min_size              = 2
   max_size = 2
   health_check_type = "ELB"
-  # tag {
-  #   key                 = "Name"
-  #   value               = "assessment-asg"
-  #   propagate_at_launch = true
-  # }
   tags = concat(
     [
       {

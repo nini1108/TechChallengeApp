@@ -3,6 +3,25 @@
 # Create ALB
 # Create ALB listener
 
+# Create sg for applicatio load balancer
+module "Sg_Alb" {
+    source                  = "../modules/Networking/Security_Group"
+    security_group_name	    = "${var.project_name}_alb_sg"
+    vpc_id_sg	              = module.VPC.id
+    tags                    = { "Name":"${var.project_name}_alb_sg", "project_name":var.project_name , "env": var.env}
+}
+
+# Allow HTTP on Application load balancer sg
+module "Allow_Cidr_Rule_HTTP_Alb" {
+    source              = "../modules/Networking/Security_Group_Rule/allow_CIDR_rule"
+    rule_type           = "ingress"
+    security_group_id   = module.Sg_Alb.id
+    from_port	          = 80
+    to_port	            = 80
+    protocol            = "tcp"
+    allowed_cidr_blocks	= var.allowed_iprange_alb
+}
+
 #Create Application Load balancer
 module "Application_Load_Balancer" {
     source                          = "../modules/Load_Balancer"
@@ -38,4 +57,7 @@ module "Application_Load_Balancer" {
 
 
 
-
+output "lb_url" {
+  description = "URL of load balancer"
+  value       = "http://${module.Application_Load_Balancer.lb_dns_name}/"
+}

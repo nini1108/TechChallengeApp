@@ -3,6 +3,11 @@ value = aws_lb.lb.id
 description = "id of lb. same as arn"
 }
 
+output "lb_dns_name" {
+value = aws_lb.lb.dns_name 
+description = "dns of lb"
+}
+
 output "lb_arn" {
 value = aws_lb.lb.arn
 description = "arn of lb. same as id"

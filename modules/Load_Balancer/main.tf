@@ -50,7 +50,7 @@ resource "aws_lb_target_group" "lb_target_group" {
   protocol    = var.target_group_protocol
   target_type = var.target_type
   vpc_id      = var.target_group_vpc_id
-  tags = var.tags_target_group
+  tags        = var.tags_target_group
 
   health_check {
     path = var.target_group_healthcheck_path

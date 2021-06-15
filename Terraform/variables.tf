@@ -1,5 +1,4 @@
 #common variales 
-
 variable region {
     type        = string
     description = "region"
@@ -51,9 +50,15 @@ variable public_ssh_key_name {
 
 
 #database
-
 variable db_password {
     type        = string
     description = "database password"
+}
+
+
+#applicatio load balancer
+variable allowed_iprange_alb {
+    type        = list(string)
+    description = "ip range from where the app will be accesed"
 }
 
