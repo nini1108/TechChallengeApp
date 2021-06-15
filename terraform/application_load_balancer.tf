@@ -1,5 +1,5 @@
 
-# Create sg for applicatio load balancer
+# Create sg for application load balancer
 module "Sg_Alb" {
     source                  = "../modules/Networking/Security_Group"
     security_group_name	    = "${var.project_name}_alb_sg"

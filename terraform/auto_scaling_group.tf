@@ -1,5 +1,5 @@
 
-# Create sg for app servers
+#Create security group for app servers
 module "Sg_App" {
     source                  = "../modules/Networking/Security_Group"
     security_group_name	    = "${var.project_name}_app_sg"
@@ -7,7 +7,7 @@ module "Sg_App" {
     tags                    = { "Name":"${var.project_name}_app_sg", "project_name":var.project_name , "env": var.env}
 }
 
-#Add  Security group rule to connect from Appserver to Database
+#Create security group rule to connect from appserver to database
 module "Allow_SG_rule_Bastion_to_DB" {
     source                  = "../modules/Networking/Security_Group_Rule/allow_SG_rule"
     rule_type               = "ingress"
@@ -18,7 +18,7 @@ module "Allow_SG_rule_Bastion_to_DB" {
     allowed_security_grp_id	 = module.Sg_App.id
 }
 
-# Add rule to allow ssh to app server
+#Create security group rule to allow ssh to app server
 module "Allow_Cidr_Rule_Ssh_App_server" {
     source                  = "../modules/Networking/Security_Group_Rule/allow_CIDR_rule"
     rule_type               = "ingress"
@@ -30,7 +30,7 @@ module "Allow_Cidr_Rule_Ssh_App_server" {
 }
 
 
-# Create sgrule for websg to allow 8080 from alb sg
+#Create security group rule for websg to allow 8080 from alb security group
 module "Allow_Sg_Rule_ALB_to_App" {
     source                  = "../modules/Networking/Security_Group_Rule/allow_SG_rule"
     rule_type               = "ingress"
@@ -49,20 +49,6 @@ resource "aws_key_pair" "publickey" {
   tags       = { "project_name":var.project_name , "env": var.env}
 }
 
-# cerate template file
-# data "template_file" "user_data_assessment" {
-#   template = <<-EOF
-#               #!/bin/bash -xe
-#               apt-get update -y
-#               apt-get install -y awscli docker.io jq    
-#               docker run -d -e VTT_DBUSER=postgres -e VTT_DBPASSWORD=${var.db_password} -e VTT_DBNAME=postgres -e VTT_DBPORT=5432 -e VTT_DBHOST="${module.Postgres_Rds.address}" -e VTT_LISTENHOST=0.0.0.0 -e VTT_ListenPort="3000" servian/techchallengeapp:latest updatedb -s
-#               docker run --restart always  --name assessment-app -p 8080:3000 -e VTT_DBUSER=postgres -e VTT_DBPASSWORD=${var.db_password} -e VTT_DBNAME=postgres -e VTT_DBPORT=5432 -e VTT_DBHOST="${module.Postgres_Rds.address}" -e VTT_LISTENHOST=0.0.0.0 -e VTT_ListenPort="3000" -d servian/techchallengeapp:latest serve
-#             EOF
-#   vars = {
-#     db_password = "${var.db_password}"
-#     db_address  = "${module.Postgres_Rds.address}"
-#   }
-# }
 
 #Create launch configuration
 resource "aws_launch_configuration" "asg_launch_config_assesment" {
@@ -72,12 +58,11 @@ resource "aws_launch_configuration" "asg_launch_config_assesment" {
   security_groups   = [module.Sg_App.id]
   associate_public_ip_address = true 
   key_name          = aws_key_pair.publickey.key_name
-  #user_data         = "${base64encode(data.template_file.user_data_assessment.rendered)}"
   user_data = <<-EOF
   #!/bin/bash -xe
   apt-get update -y
   apt-get install -y awscli docker.io jq    
-  docker run -d -e VTT_DBUSER=postgres -e VTT_DBPASSWORD=pass -e VTT_DBNAME=postgres -e VTT_DBPORT=5432 -e VTT_DBHOST="${module.Postgres_Rds.address}" -e VTT_LISTENHOST=0.0.0.0 -e VTT_ListenPort="3000" servian/techchallengeapp:latest updatedb -s
+  docker run -d -e VTT_DBUSER=postgres -e VTT_DBPASSWORD=${var.db_password} -e VTT_DBNAME=postgres -e VTT_DBPORT=5432 -e VTT_DBHOST="${module.Postgres_Rds.address}" -e VTT_LISTENHOST=0.0.0.0 -e VTT_ListenPort="3000" servian/techchallengeapp:latest updatedb -s
   docker run --restart always  --name assessment-app  -p 8080:3000 -e VTT_DBUSER=postgres -e VTT_DBPASSWORD=${var.db_password} -e VTT_DBNAME=postgres -e VTT_DBPORT=5432 -e VTT_DBHOST="${module.Postgres_Rds.address}" -e VTT_LISTENHOST=0.0.0.0 -e VTT_ListenPort="3000" -d servian/techchallengeapp:latest serve
   EOF
   lifecycle {
