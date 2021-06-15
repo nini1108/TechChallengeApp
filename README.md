@@ -1,7 +1,7 @@
 # TechChallengeApp
 
 ## Architecture 
-
+![Alt text](./architecture.jpeg?raw=true "architecture")
 
 ## Prerequisites
 * Install terraform ( preferrably 14.5, as this has been tested on 14.5). 
