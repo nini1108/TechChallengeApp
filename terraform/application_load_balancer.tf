@@ -1,7 +1,3 @@
-# Create Target group
-# Create target group association
-# Create ALB
-# Create ALB listener
 
 # Create sg for applicatio load balancer
 module "Sg_Alb" {
@@ -22,7 +18,10 @@ module "Allow_Cidr_Rule_HTTP_Alb" {
     allowed_cidr_blocks	= var.allowed_iprange_alb
 }
 
-#Create Application Load balancer
+# Create Target group
+# Create target group association
+# Create ALB
+# Create ALB listener
 module "Application_Load_Balancer" {
     source                          = "../modules/Load_Balancer"
     
@@ -55,8 +54,7 @@ module "Application_Load_Balancer" {
 }
 
 
-
-
+#Get ALB url
 output "lb_url" {
   description = "URL of load balancer"
   value       = "http://${module.Application_Load_Balancer.lb_dns_name}/"

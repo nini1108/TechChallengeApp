@@ -1,6 +1,4 @@
 
-
-
 # Create sg for app servers
 module "Sg_App" {
     source                  = "../modules/Networking/Security_Group"
@@ -87,7 +85,7 @@ resource "aws_launch_configuration" "asg_launch_config_assesment" {
   }
 }
 
-
+# Create auto scaling group
 resource "aws_autoscaling_group" "asg_assessment" {
   name                  = "${var.project_name}_asg"
   launch_configuration  = aws_launch_configuration.asg_launch_config_assesment.id

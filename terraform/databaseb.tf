@@ -7,8 +7,6 @@ module DB_Security_Group {
 }
 
 
-
-
 #Create Db subnet group
 module "DB_Subnet_Group" {
     source                  = "../modules/DB_Subnet_Group"
@@ -23,7 +21,6 @@ module "Postgres_Rds" {
     source                      = "../modules/Database"
     db_engine	                = "postgres"       
     db_engine_version	        = "12.5"
-    #db_license_model            = "license-included"
     db_ec2_instance_class	    = "db.t3.micro"
     db_instance_name	        = "${var.project_name}db"
     db_admin_username	        = "postgres"

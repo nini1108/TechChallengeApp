@@ -62,7 +62,7 @@ module "Internet_Gateway" {
     tags                    = { "Name":"${var.project_name}_igw" , "project_name":var.project_name , "env": var.env}
 }
 
-#Create route from subnet_a to IGW
+#Create route from subnet_a to internet gateway
 module "Route_Public_Subnet_A_IGW" {
     source                  = "../modules/Networking/Route"
     route_table_id          = module.Route_Table_Subnet_A.id
@@ -71,7 +71,7 @@ module "Route_Public_Subnet_A_IGW" {
     nat_gateway_id          = null
 }
 
-#Create route from subnet_b to IGW
+#Create route from subnet_b to internet gateway
 module "Route_Public_Subnet_B_IGW" {
     source                  = "../modules/Networking/Route"
     route_table_id          = module.Route_Table_Subnet_B.id

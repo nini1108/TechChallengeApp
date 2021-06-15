@@ -14,7 +14,6 @@ variable env {
     description = "Environment"
 }
 
-
 variable allowed_iprange {
     type        = list(string)
     description = "allowed ip ranges from where to ssh or call service"
