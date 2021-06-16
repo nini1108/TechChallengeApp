@@ -1,7 +1,7 @@
 # Create VPC 
 module "VPC" {
     source                  = "../modules/Networking/VPC"
-    vpc_cidr_block          = var.vpc_cidr_block     #"10.5.0.0/16"
+    cidr_block              = var.vpc_cidr_block     #"10.5.0.0/16"
     enable_dns_hostnames    = "true"
     enable_dns_support      = "true"
     tags                    = { "Name":"${var.project_name}_vpc", "project_name":var.project_name , "env": var.env}
@@ -11,8 +11,8 @@ module "VPC" {
 module "Subnet_A" {
     source                      = "../modules/Networking/Subnet"
     vpc_id                      = module.VPC.id
-    subnet_cidr_block           = var.subnet_a_cidr_block    #"10.5.1.0/24"
-    subnet_availability_zone    = "ap-southeast-2a"
+    cidr_block           = var.subnet_a_cidr_block    #"10.5.1.0/24"
+    availability_zone    = "ap-southeast-2a"
     tags                        = { "Name":"${var.project_name}_subnet_a" , "project_name":var.project_name , "env": var.env}
 }
 
@@ -20,8 +20,8 @@ module "Subnet_A" {
 module "Subnet_B" {
     source                      = "../modules/Networking/Subnet"
     vpc_id                      = module.VPC.id
-    subnet_cidr_block           = var.subnet_b_cidr_block    #"10.5.2.0/24"
-    subnet_availability_zone    = "ap-southeast-2b"
+    cidr_block           = var.subnet_b_cidr_block    #"10.5.2.0/24"
+    availability_zone    = "ap-southeast-2b"
     tags                        = { "Name":"${var.project_name}_subnet_b" , "project_name":var.project_name , "env": var.env}
 }
 
@@ -29,7 +29,7 @@ module "Subnet_B" {
 #Create Route table for subnet_a
 module "Route_Table_Subnet_A" {
     source              = "../modules/Networking/Route_Table"
-    route_table_vpc_id  = module.VPC.id
+    vpc_id              = module.VPC.id
     tags                = { "Name":"${var.project_name}_route_table_subnet_a" , "project_name":var.project_name , "env": var.env}
 }
 
@@ -44,7 +44,7 @@ module "Route_Table_Assoc_Subnet_A" {
 #Create Route table for subnet_b
 module "Route_Table_Subnet_B" {
     source              = "../modules/Networking/Route_Table"
-    route_table_vpc_id  = module.VPC.id
+    vpc_id              = module.VPC.id
     tags                = { "Name":"${var.project_name}_route_table_subnet_b" , "project_name":var.project_name , "env": var.env}
 }
 
@@ -58,7 +58,7 @@ module "Route_Table_Assoc_Subnet_B" {
 #Create Internet Gateway
 module "Internet_Gateway" {
     source                  = "../modules/Networking/Internet_Gateway"
-    internet_gateway_vpc_id = module.VPC.id
+    vpc_id                  = module.VPC.id
     tags                    = { "Name":"${var.project_name}_igw" , "project_name":var.project_name , "env": var.env}
 }
 
@@ -67,7 +67,7 @@ module "Route_Public_Subnet_A_IGW" {
     source                  = "../modules/Networking/Route"
     route_table_id          = module.Route_Table_Subnet_A.id
     destination_cidr_block  = "0.0.0.0/0"
-    internet_gateway_id     = module.Internet_Gateway.id
+    gateway_id              = module.Internet_Gateway.id
     nat_gateway_id          = null
 }
 
@@ -76,6 +76,6 @@ module "Route_Public_Subnet_B_IGW" {
     source                  = "../modules/Networking/Route"
     route_table_id          = module.Route_Table_Subnet_B.id
     destination_cidr_block  = "0.0.0.0/0"
-    internet_gateway_id     = module.Internet_Gateway.id
+    gateway_id              = module.Internet_Gateway.id
     nat_gateway_id          = null
 }

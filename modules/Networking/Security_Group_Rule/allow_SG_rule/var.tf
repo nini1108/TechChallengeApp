@@ -4,7 +4,7 @@ type = string
 description = " sg id"
 }
 
-variable rule_type {
+variable type {
 type = string
 description = " sg id"
 }
@@ -25,7 +25,7 @@ default = "tcp"
 description = " tcp etc"
 }
 
-variable allowed_security_grp_id {
+variable source_security_group_id {
 type = string
-description = "allowed_security_grp_id"
+description = "allowed security grp id"
 }

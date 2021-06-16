@@ -2,20 +2,20 @@
 # Create sg for application load balancer
 module "Sg_Alb" {
     source                  = "../modules/Networking/Security_Group"
-    security_group_name	    = "${var.project_name}_alb_sg"
-    vpc_id_sg	              = module.VPC.id
+    name	                = "${var.project_name}_alb_sg"
+    vpc_id                  = module.VPC.id
     tags                    = { "Name":"${var.project_name}_alb_sg", "project_name":var.project_name , "env": var.env}
 }
 
 # Allow HTTP on Application load balancer sg
 module "Allow_Cidr_Rule_HTTP_Alb" {
     source              = "../modules/Networking/Security_Group_Rule/allow_CIDR_rule"
-    rule_type           = "ingress"
+    type           = "ingress"
     security_group_id   = module.Sg_Alb.id
     from_port	          = 80
     to_port	            = 80
     protocol            = "tcp"
-    allowed_cidr_blocks	= var.allowed_iprange_alb
+    cidr_blocks	= var.allowed_iprange_alb
 }
 
 # Create Target group

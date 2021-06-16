@@ -1,4 +1,4 @@
-variable internet_gateway_vpc_id {
+variable vpc_id {
 type = string
 description = "Id of vpc in which internet_gateway will be created"
 }

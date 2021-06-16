@@ -2,43 +2,43 @@
 #Create security group for app servers
 module "Sg_App" {
     source                  = "../modules/Networking/Security_Group"
-    security_group_name	    = "${var.project_name}_app_sg"
-    vpc_id_sg	            = module.VPC.id
+    name	                  = "${var.project_name}_app_sg"
+    vpc_id	                = module.VPC.id
     tags                    = { "Name":"${var.project_name}_app_sg", "project_name":var.project_name , "env": var.env}
 }
 
 #Create security group rule to connect from appserver to database
 module "Allow_SG_rule_Bastion_to_DB" {
     source                  = "../modules/Networking/Security_Group_Rule/allow_SG_rule"
-    rule_type               = "ingress"
+    type               = "ingress"
     security_group_id       = module.DB_Security_Group.id
     from_port	              = 5432
     to_port	                = 5432
     protocol                = "tcp"
-    allowed_security_grp_id	 = module.Sg_App.id
+    source_security_group_id	 = module.Sg_App.id
 }
 
 #Create security group rule to allow ssh to app server
 module "Allow_Cidr_Rule_Ssh_App_server" {
     source                  = "../modules/Networking/Security_Group_Rule/allow_CIDR_rule"
-    rule_type               = "ingress"
+    type               = "ingress"
     security_group_id       = module.Sg_App.id
     from_port	              = 22
     to_port	                = 22
     protocol                = "tcp"
-    allowed_cidr_blocks	    = var.allowed_iprange
+    cidr_blocks	    = var.allowed_iprange
 }
 
 
 #Create security group rule for websg to allow 8080 from alb security group
 module "Allow_Sg_Rule_ALB_to_App" {
     source                  = "../modules/Networking/Security_Group_Rule/allow_SG_rule"
-    rule_type               = "ingress"
+    type               = "ingress"
     security_group_id       = module.Sg_App.id
     from_port	              = 8080
     to_port	                = 8080
     protocol                = "tcp"
-    allowed_security_grp_id	= module.Sg_Alb.id
+    source_security_group_id	= module.Sg_Alb.id
 }
 
 
