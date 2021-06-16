@@ -4,9 +4,9 @@ type = string
 description = " sg id"
 }
 
-variable rule_type {
+variable type {
 type = string
-description = " sg id"
+description = " rule type ingress or egress"
 }
 
 variable from_port {
@@ -25,12 +25,12 @@ default = "tcp"
 description = " tcp etc"
 }
 
-variable allowed_cidr_blocks {
+variable cidr_blocks {
 type = list(string)
 description = " allowed_cidr_blocks"
 }
 
-variable sg_rule_description {
+variable description {
 type = string
 default = null
 description = "security group rule description"

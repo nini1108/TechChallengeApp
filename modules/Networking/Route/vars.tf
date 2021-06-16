@@ -8,7 +8,7 @@ type = string
 description = "destination ip block"
 }
 
-variable internet_gateway_id {
+variable gateway_id {
 type = string
 description = "internet_gateway_id if target is internet gateway otherwise null"
 }

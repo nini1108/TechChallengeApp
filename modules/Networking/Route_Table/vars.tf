@@ -1,4 +1,4 @@
-variable route_table_vpc_id {
+variable vpc_id {
 type = string
 description = "VPC id in which route tables will be created"
 }

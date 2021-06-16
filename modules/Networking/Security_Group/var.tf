@@ -1,10 +1,10 @@
 
-variable security_group_name {
+variable name {
 type = string
 description = " sg name"
 }
 
-variable vpc_id_sg {
+variable vpc_id {
 type = string
 description = " vpc in which it will be created "
 }

@@ -1,9 +1,9 @@
-variable db_subnet_group_name {
+variable name {
 type = string
 description = "name of db subnet group"
 }
 
-variable db_subnet_ids {
+variable subnet_ids {
 type = list(string)
 description = "Subnet ids that are supposed to be added to the subnet group"
 }

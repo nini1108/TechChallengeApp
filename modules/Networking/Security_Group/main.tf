@@ -1,8 +1,8 @@
 
 resource "aws_security_group" "security_group" {
-  name        = var.security_group_name
+  name        = var.name
   description = "traffic rules"
-  vpc_id      = var.vpc_id_sg
+  vpc_id      = var.vpc_id
 
 
   egress {
